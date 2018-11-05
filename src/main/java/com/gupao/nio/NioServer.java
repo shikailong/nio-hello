@@ -53,8 +53,6 @@ public class NioServer {
     }
 
     private void process(SelectionKey next) {
-        SelectableChannel channel = next.channel();
-        boolean blocking = channel.isBlocking();
     }
 
 
