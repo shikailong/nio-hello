@@ -17,7 +17,7 @@ public class BioClient {
             new Thread(()->{
                 try {
 //                    countDownLatch.await();
-                    Socket client = new Socket("localhost", 12345);
+                    Socket client = new Socket("localhost", 8080);
                     OutputStream os = client.getOutputStream();
                     String name = "娃哈哈窿";
                     os.write(name.getBytes());
