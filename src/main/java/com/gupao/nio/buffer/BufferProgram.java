@@ -13,7 +13,7 @@ public class BufferProgram {
 
     public static void main(String[] args) throws IOException {
 
-        FileInputStream fis = new FileInputStream("e://test.txt");
+        FileInputStream fis = new FileInputStream("d://test.txt");
         FileChannel channel = fis.getChannel();
 
         ByteBuffer buffer = ByteBuffer.allocate(10);
