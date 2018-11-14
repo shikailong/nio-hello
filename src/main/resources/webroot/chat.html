@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-    <div>
+    <div id="loginbox">
         <div>
             <br/><br/>
             <input type="text" style="width: 180px;" placeholder="进入前请输入昵称" id="nickName" >
@@ -14,8 +14,38 @@
         </div>
     </div>
     <div id="chatbox" style="display: none">
-        <div style="background: #333;height: 28px;width: 100%;font-size: 12px;position: fixed;">
-            <div></div>
+        <div style="background: #333;height: 28px;width: 100%;font-size: 12px;position: fixed;top: 0px;z-index: 1000;">
+            <div style="line-height: 28px;color: #fff">
+                <span style="text-align: left;margin-left: 10px;"></span>
+                <span style="float: right;margin-right: 10px">
+                    <span>当前在线<span id="onlinecount">0</span>人</span>
+                    <span id="shownickname">匿名</span>
+                    <a href="chat.html" onclick="CHAT.login()" style="color: #fff">退出</a>
+                </span>
+            </div>
+        </div>
+        <div id="doc">
+            <div id="chat">
+                <div id="message" class="message">
+                    <div id="onlinemsg" style="background: #EFEFF4;font-size: 12px;margin-top: 40px;" ></div>
+                </div>
+            </div>
+            <form onsubmit="return false">
+                <div class="tool-box">
+                    <div class="face-box" id="face-box"></div>
+                    <span class="face" onclick="CHAT.openFace();" title="选择表情"></span>
+
+                    <span class="flower" onclick="CHAT.sendFlower()" title="送鲜花"></span>
+                </div>
+
+                <div class="input-box">
+                    <div class="input" contenteditable="true" id="send-message"></div>
+                    <div class="action">
+                        <input type="button" class="button" id="mjr_send" onclick="CHAT.sendMsg()">
+                    </div>
+                </div>
+                <div class="copyright"></div>
+            </form>
         </div>
     </div>
 
