@@ -4,9 +4,8 @@ import io.netty.channel.*;
 import io.netty.handler.codec.http.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 public class HttpHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
@@ -16,7 +15,7 @@ public class HttpHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
     private final String WEB_ROOT = "webroot";
 
     private File getFileFromRoot(String fileName){
-        String path = baseURL + File.separator + "resources" + File.separator + "webroot" + File.separator + fileName;
+        String path = baseURL + File.separator + "resources" + File.separator + WEB_ROOT + File.separator + fileName;
         return new File(path);
     }
 
@@ -25,35 +24,52 @@ public class HttpHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
         String uri = request.uri();
         String page = uri.equals("/") ? "chat.html" : uri;
 
-        RandomAccessFile file = new RandomAccessFile(getFileFromRoot(page), "r");
-        String contextType = "text/html;";
+        RandomAccessFile file = null;
+        try {
+            file = new RandomAccessFile(getFileFromRoot(page), "r");
+        } catch (FileNotFoundException e) {
+            ctx.fireChannelRead(request.retain());
+            e.printStackTrace();
+            return ;
+        }
+        String contentType = "text/html;";
         if(uri.endsWith(".css")){
-            contextType = "text/css;";
+            contentType = "text/css;";
         }else if(uri.endsWith(".js")){
-            contextType = "text/javascript;";
+            contentType = "text/javascript;";
         }else if(uri.toUpperCase().matches("(jpg|png|gif|ico)$")){
             String ext = uri.substring(uri.lastIndexOf("."));
-            contextType = "image/" + ext + ";";
+            contentType = "image/" + ext + ";";
         }
 
-        HttpResponse response = new DefaultFullHttpResponse(request.protocolVersion(), HttpResponseStatus.OK);
-        response.headers().set(HttpHeaderNames.CONTENT_TYPE, contextType + "charset=utf-8;");
+        DefaultHttpResponse response = new DefaultHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, contentType + "charset=UTF-8");
         boolean keepAlive = HttpUtil.isKeepAlive(request);
         if(keepAlive){
             response.headers().set(HttpHeaderNames.CONTENT_LENGTH, file.length());
-                    response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
+            response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
         }
 
         ctx.write(response);
-        ctx.write(new DefaultFileRegion(file.getChannel(), 0, file.length()));
-
-        // 清空缓冲区
-        ChannelFuture f = ctx.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
-        if(!keepAlive){
-            f.addListener(ChannelFutureListener.CLOSE);
-        }
-        file.close();
+        ctx.write(new DefaultFileRegion(file.getChannel(), 0, file.length()), ctx.newProgressivePromise());
+        System.out.println(file.readLine());
         System.out.println(file);
+        // 清空缓冲区
+        ChannelFuture lastContentFuture = ctx.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT);
+        if(!keepAlive){
+            lastContentFuture.addListener(ChannelFutureListener.CLOSE);
+        }
+
+        file.close();
     }
+
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        System.out.println("exceptionCaught......");
+        System.out.println("exceptionCaught......");
+    }
+
+
 
 }
