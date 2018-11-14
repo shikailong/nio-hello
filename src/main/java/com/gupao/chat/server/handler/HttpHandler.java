@@ -29,7 +29,7 @@ public class HttpHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
             file = new RandomAccessFile(getFileFromRoot(page), "r");
         } catch (FileNotFoundException e) {
             ctx.fireChannelRead(request.retain());
-            e.printStackTrace();
+//            e.printStackTrace();
             return ;
         }
         String contentType = "text/html;";

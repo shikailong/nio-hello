@@ -1,6 +1,7 @@
 package com.gupao.chat.server;
 
 import com.gupao.chat.server.handler.HttpHandler;
+import com.gupao.chat.server.handler.WebSocketHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -10,6 +11,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
 public class ChatServer {
@@ -30,6 +32,8 @@ public class ChatServer {
                         protected void initChannel(SocketChannel ch) throws Exception {
                             // 所有自定义业务
                             ch.pipeline()
+
+                                    // =============用来支持http协议的=============
                                     // 解码编码都可以进行
                                     .addLast(new HttpServerCodec())
                                     // 可以接收到http最大的头信息
@@ -37,6 +41,12 @@ public class ChatServer {
                                     // 用于处理文件流的handler
                                     .addLast(new ChunkedWriteHandler())
                                     .addLast(new HttpHandler());
+
+                            // =============用来支持websocket协议的=============
+                            ch.pipeline()
+                                    .addLast(new WebSocketServerProtocolHandler("/im"))
+                                    .addLast(new WebSocketHandler());
+
                         }
                     });
 

@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-latest.js"></script>
+    <script type="text/javascript" src="js/snowfall.jquery.js"></script>
+    <script type="text/javascript" src="js/chat.util.js"></script>
 </head>
 <body>
     <div id="loginbox">
-        <div>
+        <div style="width: 300px;margin: 200px auto;">
+            欢迎进入
             <br/><br/>
-            <input type="text" style="width: 180px;" placeholder="进入前请输入昵称" id="nickName" >
+            <input type="text" style="width: 180px;" placeholder="进入前请输入昵称" id="nickName" name="nickName">
             <input type="button" style="width: 50px" value="进入" onclick="CHAT.login()">
             <div id="error-msg" style="color: red;"></div>
         </div>
@@ -20,7 +25,7 @@
                 <span style="float: right;margin-right: 10px">
                     <span>当前在线<span id="onlinecount">0</span>人</span>
                     <span id="shownickname">匿名</span>
-                    <a href="chat.html" onclick="CHAT.login()" style="color: #fff">退出</a>
+                    <a href="chat.html" onclick="CHAT.logout()" style="color: #fff">退出</a>
                 </span>
             </div>
         </div>
