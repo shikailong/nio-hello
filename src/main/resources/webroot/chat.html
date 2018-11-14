@@ -5,6 +5,19 @@
     <title>Title</title>
 </head>
 <body>
-聊天室
+    <div>
+        <div>
+            <br/><br/>
+            <input type="text" style="width: 180px;" placeholder="进入前请输入昵称" id="nickName" >
+            <input type="button" style="width: 50px" value="进入" onclick="CHAT.login()">
+            <div id="error-msg" style="color: red;"></div>
+        </div>
+    </div>
+    <div id="chatbox" style="display: none">
+        <div style="background: #333;height: 28px;width: 100%;font-size: 12px;position: fixed;">
+            <div></div>
+        </div>
+    </div>
+
 </body>
 </html>
