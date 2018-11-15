@@ -14,6 +14,22 @@ public class IMEncoder extends MessageToByteEncoder<IMMessage> {
 
     }
 
-
+    public String encode(IMMessage msg){
+        if(null == msg){
+            return "";
+        }
+        String prex = "[" + msg.getCmd() + "]" + "[" + msg.getTime() + "]";
+        if(IMP.LOGIN.getName().equals(msg.getCmd())
+                || IMP.CHAT.equals(msg.getCmd())
+                || IMP.FLOWER.equals(msg.getCmd())){
+            prex += ("[" + msg.getSender() + "]");
+        }else if(IMP.SYSTEM.getName().equals(msg.getCmd())){
+            prex += ("[" + msg.getOnline() + "]");
+        }
+        if(null != msg.getContent() && !"".equals(msg.getContent())){
+            prex += (" - " + msg.getContent());
+        }
+        return prex;
+    }
 
 }
