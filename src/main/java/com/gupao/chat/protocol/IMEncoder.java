@@ -20,8 +20,8 @@ public class IMEncoder extends MessageToByteEncoder<IMMessage> {
         }
         String prex = "[" + msg.getCmd() + "]" + "[" + msg.getTime() + "]";
         if(IMP.LOGIN.getName().equals(msg.getCmd())
-                || IMP.CHAT.equals(msg.getCmd())
-                || IMP.FLOWER.equals(msg.getCmd())){
+                || IMP.CHAT.getName().equals(msg.getCmd())
+                || IMP.FLOWER.getName().equals(msg.getCmd())){
             prex += ("[" + msg.getSender() + "]");
         }else if(IMP.SYSTEM.getName().equals(msg.getCmd())){
             prex += ("[" + msg.getOnline() + "]");

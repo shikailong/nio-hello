@@ -60,7 +60,7 @@ $(document).ready(function () {
                    addSystemTip(content);
                }else if(cmd == 'CHAT'){
                    var date = new Date(parseInt(time));
-                   addSystemTip('<span class="time-label">' + date.format("hh:mm:ss") + '</span>');
+                   addSystemTip('<span class="time-label">' + date.Format("hh:mm:ss") + '</span>');
                    var isme = (name == 'you') ? true : false;
                    var contentDiv = '<div>' + content + '</div>';
                    var userNameDiv = '<span>' + name + '</span>';
@@ -73,7 +73,7 @@ $(document).ready(function () {
                        section.className = 'service';
                        section.innerHTML = userNameDiv + contentDiv ;
                    }
-                   $("#onlinecount").append(section);
+                   $("#onlinemsg").append(section);
                }else if(cmd == 'FLOWER'){
                    addSystemTip(content);
 
@@ -109,7 +109,7 @@ $(document).ready(function () {
                };
                CHAT.socket.close = function (e) {
                    // alert("WebSocket关闭");
-                   appendToPanel("[SYSTEM][" + new Date() + "][0] - 服务器关闭，暂不能聊天" )
+                   appendToPanel("[SYSTEM][" + new Date() + "][0] - 服务器关闭，暂不能聊天！" )
                };
            }else{
                alert("你的浏览器不支持websocket协议，赶紧几把换一个！");
@@ -138,6 +138,28 @@ $(document).ready(function () {
        },
        logout : function () {
            window.location.reload();
+       },
+       clear : function(){
+            CHAT.box.innerHTML = "";
+       },
+       sendText : function(){
+           var message = $("#send-message");
+
+           if(message.html().replace(/\s/ig, "") == ""){
+               return false;
+           }
+           if(!window.WebSocket){
+               return false;
+           }
+           if(CHAT.socket.readyState == WebSocket.OPEN){
+               var msg = ("[CHAT][" + new Date().getTime() + "][" + CHAT.nickName + "]" + " - " + message.html());
+               CHAT.socket.send(msg);
+               message.empty();
+               message.focus();
+           } else{
+               alert("与服务器连接失败！");
+           }
+
        }
    }
 });
