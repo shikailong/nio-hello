@@ -3,7 +3,9 @@ package com.gupao.chat.protocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import org.msgpack.MessagePack;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,7 +15,26 @@ public class IMDecoder extends ByteToMessageDecoder {
 //    private Pattern pattern = Pattern.compile("/^(\\[[a-zA-Z0-9]*\\]){1,4}(\\s\\-\\s(.*))?$/");
     private Pattern pattern = Pattern.compile("^\\[(.*)\\](\\s\\-\\s(.*))?$");
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
+        try {
+            final int length = in.readableBytes();
+            final byte[] array = new byte[length];
+
+            String content = new String(array, 0, length);
+
+            if(null != content && !"".equals(content.trim())){
+                if(!IMP.isIMP(content)){
+                    ctx.channel().pipeline().remove(this);
+                    return ;
+                }
+            }
+
+            in.getBytes(in.readableBytes(), array, 0, length);
+            out.add(new MessagePack().read(array, IMMessage.class));
+            in.clear();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

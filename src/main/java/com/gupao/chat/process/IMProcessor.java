@@ -24,6 +24,12 @@ public class IMProcessor {
         onlineUsers.remove(client);
     }
 
+
+    public void process(Channel client, IMMessage imMessage){
+        process(client, imEncoder.encode(imMessage));
+    }
+
+
     public void process(Channel client, String msg){
         System.out.println(msg);
 

@@ -1,6 +1,9 @@
 package com.gupao.chat.server;
 
+import com.gupao.chat.protocol.IMDecoder;
+import com.gupao.chat.protocol.IMEncoder;
 import com.gupao.chat.server.handler.HttpHandler;
+import com.gupao.chat.server.handler.SocketHandler;
 import com.gupao.chat.server.handler.WebSocketHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -46,6 +49,12 @@ public class ChatServer {
                             ch.pipeline()
                                     .addLast(new WebSocketServerProtocolHandler("/im"))
                                     .addLast(new WebSocketHandler());
+
+                            // =============用来支持自定义socket协议的=============
+                            ch.pipeline()
+                                    .addLast(new IMDecoder())
+                                    .addLast(new IMEncoder())
+                                    .addLast(new SocketHandler());
 
                         }
                     });
