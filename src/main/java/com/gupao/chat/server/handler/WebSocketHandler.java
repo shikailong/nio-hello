@@ -12,6 +12,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
 //        System.out.println(msg.text());
+        System.out.println(msg.text() +"......" + this);
         processor.process(ctx.channel(), msg.text());
     }
 

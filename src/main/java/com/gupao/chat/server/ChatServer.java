@@ -30,6 +30,7 @@ public class ChatServer {
             server.group(boosGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 1024)
+//                    .channel(null) // 这是boss主线程中调用，可以用于权限控制
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {

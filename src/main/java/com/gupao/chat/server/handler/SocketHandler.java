@@ -6,9 +6,12 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
+import java.util.List;
+
 public class SocketHandler extends SimpleChannelInboundHandler<IMMessage> {
 
     private IMProcessor processor = new IMProcessor();
+    List<Object>[] list = new List[10];
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, IMMessage msg) throws Exception {

@@ -50,7 +50,7 @@ public class ChatHandler {
                         }
                     });
 
-            ChannelFuture future = server.bind(this.port).sync();
+            ChannelFuture future = server.connect(this.host, this.port).sync();
             System.out.println("聊天客户端已经启动：" + this.port);
             future.channel().closeFuture().sync();
 
